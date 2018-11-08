@@ -33,25 +33,10 @@ class neural_net:
 
 	def backprop(self, y):
 		self.y = y 								# (1,10)
-		d_c_out= 2*(self.y-self.a[3])
-
-		d_c_z2 = d_c_out*self.sigmoid_der(self.a[3])# (1,10)
-		d_c_b2 = d_c_z2								# (1,10)
-		d_c_w2 = np.dot(self.a[2].T, d_c_z2)		# (20,10)
-		d_c_a2 = np.dot(d_c_z2, self.weights[2].T)			# (1,20)
-		
-		d_c_z1 = d_c_a2*self.sigmoid_der(self.a[2])	# (1,20)
-		d_c_b1 = d_c_z1								# (1,20)
-		d_c_w1 = np.dot(self.a[1].T, d_c_z1)		# (20,20)
-		d_c_a1 = np.dot(d_c_z1, self.weights[1].T)			# (1,20)
-		
-		d_c_z0 = d_c_a1*self.sigmoid_der(self.a[1])	# (1,20)
-		d_c_b0 = d_c_z0								# (1,20)
-		d_c_w0 = np.dot(self.a[0].T, d_c_z0)		# (784,20)
-
-		self.weights[0]+=d_c_w0
-		self.bias[0]+=d_c_b0
-		self.weights[1]+=d_c_w1
-		self.bias[1]+=d_c_b1
-		self.weights[2]+=d_c_w2
-		self.bias[2]+=d_c_b2
+		d_c_a = 2*(self.y-self.a[3])
+		for i in range(len(self.nrons)-2, -1, -1):
+			d_c_b = d_c_a*self.sigmoid_der(self.a[i+1])
+			d_c_w = np.dot(self.a[i].T, d_c_b)
+			d_c_a = np.dot(d_c_b, self.weights[i].T)
+			self.weights[i]+=d_c_w
+			self.bias[i]+=d_c_b
