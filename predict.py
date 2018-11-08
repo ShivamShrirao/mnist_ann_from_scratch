@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import nnet
 import pickle
 import numpy as np
 from mnist import MNIST

@@ -13,43 +13,52 @@ X_train = mndata.process_images_to_numpy(X_train)/255
 X_test, y_test = mndata.load_testing()
 X_test = mndata.process_images_to_numpy(X_test)/255
 
-cnn=nnet.neural_net(nrons=[784,100,50,30,10])
+cnn=nnet.neural_net(nrons=[784,150,40,10])		# 784,100,50,10
 cnn.learning_rate=0.1
-# cnn.activations(func=['sigmoid','relu','softmax'])
+cnn.activations(func=['sigmoid','sigmoid','sigmoid'])
 y_inp=np.zeros((len(y_train),10))
 for i in range(len(y_train)):
 	y_inp[i][y_train[i]]=1
 
 print("Training....")
-epoch=epochs=5
+epoch=epochs=1
+
+total_t=time()
 while epoch>0:
-	print("Epoch:",(1+epochs-epoch))
+	print("\nEpoch:",(1+epochs-epoch),'/',epochs)
 	epoch-=1
+	correct=0
 	t=time()
 	for i in range(len(X_train)):
 		out=cnn.feed_forward(X_train[i])
+		ans=out.argmax()
 		cnn.backprop(y_inp[i])
+		cor=y_train[i]
+		if ans == cor:
+			correct+=1
 		if not i%1000:
 			print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
 	print()
+	if epoch<(0.3*epochs):
+		cnn.learning_rate=0.01
+	print("Accuracy:",(correct*100/len(y_train)),'%')
 	print("Time:",(time()-t))
 
-
-with open('trained.dump','wb') as f:
-	pickle.dump(cnn,f)
+print("\nTotal time:",(time()-total_t),"sec")
+# with open('trained.dump','wb') as f:
+# 	pickle.dump(cnn,f)
 
 print("Calculating accuracy....")
+
 correct=0
 for i in range(len(X_train)):
 	out=cnn.feed_forward(X_train[i])
 	ans=out.argmax()
-	# cnn.backprop(y_inp[i])
 	cor=y_train[i]
 	if ans == cor:
 		correct+=1
 	if not i%1000:
-		print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
-
+			print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
 print()
 print("Training accuracy:",(correct*100/len(y_train)),'%')
 
