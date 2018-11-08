@@ -33,7 +33,7 @@ class neural_net:
 
 	def backprop(self, y):
 		self.y = y 								# (1,10)
-		d_c_a = 2*(self.y-self.a[3])
+		d_c_a = 2*(self.y-self.a[-1])
 		for i in range(len(self.nrons)-2, -1, -1):
 			d_c_b = d_c_a*self.sigmoid_der(self.a[i+1])
 			d_c_w = np.dot(self.a[i].T, d_c_b)

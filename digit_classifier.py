@@ -12,7 +12,7 @@ X_train = mndata.process_images_to_numpy(X_train)/255
 X_test, y_test = mndata.load_testing()
 X_test = mndata.process_images_to_numpy(X_test)/255
 
-cnn=nnet.neural_net(nrons=[784,20,20,10])
+cnn=nnet.neural_net(nrons=[784,50,30,10])
 # cnn.activations(func=['sigmoid','relu','softmax'])
 t=time()
 
@@ -39,3 +39,25 @@ print("Cost:",((y-out)**2).sum())
 
 plt.imshow(X_test[ng].reshape(28,28), cmap='Greys')
 plt.show()
+
+correct=0
+for i in range(len(X_train)):
+	y = np.zeros(10)
+	out=cnn.feed_forward(X_train[i])
+	ans=out.argmax()
+	cor=y_train[i]
+	if ans == cor:
+		correct+=1
+
+print("Training accuracy:",(correct*100/len(y_train)),'%')
+
+correct=0
+for i in range(len(X_test)):
+	y = np.zeros(10)
+	out=cnn.feed_forward(X_test[i])
+	ans=out.argmax()
+	cor=y_test[i]
+	if ans == cor:
+		correct+=1
+
+print("Testing accuracy:",(correct*100/len(y_test)),'%')
