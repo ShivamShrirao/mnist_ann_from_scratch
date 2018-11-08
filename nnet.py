@@ -39,5 +39,5 @@ class neural_net:
 			d_c_b = d_c_a*self.sigmoid_der(self.a[i+1])
 			d_c_w = np.dot(self.a[i].T, d_c_b)
 			d_c_a = np.dot(d_c_b, self.weights[i].T)
-			self.weights[i]+=d_c_w*self.learning_rate
-			self.bias[i]+=d_c_b*self.learning_rate
+			self.weights[i]+=(d_c_w*self.learning_rate)
+			self.bias[i]+=(d_c_b*self.learning_rate)
