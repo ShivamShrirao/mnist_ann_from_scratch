@@ -14,13 +14,14 @@ X_test = mndata.process_images_to_numpy(X_test)/255
 
 cnn=nnet.neural_net(nrons=[784,50,30,10])
 # cnn.activations(func=['sigmoid','relu','softmax'])
-t=time()
+y=np.zeros((len(y_train),10))
+for i in range(len(y_train)):
+	y[i][y_train[i]]=1
 
+t=time()
 for i in range(len(X_train)):
-	y = np.zeros(10)
 	out=cnn.feed_forward(X_train[i])
-	y[y_train[i]] = 1
-	cnn.backprop(y)
+	cnn.backprop(y[i])
 	if not i%1000:
 		print('\rProgress:',str(i/600)[:5],'%',end='')
 
@@ -37,12 +38,11 @@ y[y_test[ng]] = 1
 print("Correct answer is:",y_test[ng])
 print("Cost:",((y-out)**2).sum())
 
-plt.imshow(X_test[ng].reshape(28,28), cmap='Greys')
-plt.show()
+# plt.imshow(X_test[ng].reshape(28,28), cmap='Greys')
+# plt.show()
 
 correct=0
 for i in range(len(X_train)):
-	y = np.zeros(10)
 	out=cnn.feed_forward(X_train[i])
 	ans=out.argmax()
 	cor=y_train[i]
@@ -53,7 +53,6 @@ print("Training accuracy:",(correct*100/len(y_train)),'%')
 
 correct=0
 for i in range(len(X_test)):
-	y = np.zeros(10)
 	out=cnn.feed_forward(X_test[i])
 	ans=out.argmax()
 	cor=y_test[i]
