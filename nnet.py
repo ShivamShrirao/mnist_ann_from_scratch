@@ -23,24 +23,35 @@ class neural_net:
 	def sigmoid_der(self,x):
 		return x * (1 - x)
 
-	def feed_forward(self, X):			# X = [i1, i2, i3, i4, i5]
+	def feed_forward(self, X):
 		self.X = X.reshape(1,self.nrons[0])
-		self.a = [self.X]
+		self.a = [self.X]						# (1,784)
 		for i in range(len(self.nrons)-1):
-			z = (np.dot(self.a[i] ,self.weights[i])+self.bias[i])
-			self.a.append(self.sigmoid(z))
-		self.out = self.a[-1]
-		return self.out
+			z = (np.dot(self.a[i] ,self.weights[i])+self.bias[i])	# w0(784,20) w1(20,20) w2(20,10)
+			self.a.append(self.sigmoid(z))		# a0(1,784) a1(1,20) a2(1,20) b
+		return self.a[-1]					# a3(1,10)
 
 	def backprop(self, y):
-		self.y = y
-		d_c_z2	= (2*(self.y-self.out)*self.sigmoid_der(self.out))
-		d_c_w2	= np.dot(d_c_z2.T,self.a[2])
-		d_c_b2	= d_c_z2.sum()
-		d_c_z	= (np.dot(d_c_z2,self.w2)*self.sigmoid_der(self.a))
-		d_c_w1	= np.dot(self.X.T, d_c_z)
-		d_c_b1	= d_c_z.sum()
-		self.w1+=d_c_w1
-		self.b1+=d_c_b1
-		self.w2+=d_c_w2
-		self.b2+=d_c_b2
+		self.y = y 								# (1,10)
+		d_c_out= 2*(self.y-self.a[3])
+
+		d_c_z2 = d_c_out*self.sigmoid_der(self.a[3])# (1,10)
+		d_c_b2 = d_c_z2								# (1,10)
+		d_c_w2 = np.dot(self.a[2].T, d_c_z2)		# (20,10)
+		d_c_a2 = np.dot(d_c_z2, self.weights[2].T)			# (1,20)
+		
+		d_c_z1 = d_c_a2*self.sigmoid_der(self.a[2])	# (1,20)
+		d_c_b1 = d_c_z1								# (1,20)
+		d_c_w1 = np.dot(self.a[1].T, d_c_z1)		# (20,20)
+		d_c_a1 = np.dot(d_c_z1, self.weights[1].T)			# (1,20)
+		
+		d_c_z0 = d_c_a1*self.sigmoid_der(self.a[1])	# (1,20)
+		d_c_b0 = d_c_z0								# (1,20)
+		d_c_w0 = np.dot(self.a[0].T, d_c_z0)		# (784,20)
+
+		self.weights[0]+=d_c_w0
+		self.bias[0]+=d_c_b0
+		self.weights[1]+=d_c_w1
+		self.bias[1]+=d_c_b1
+		self.weights[2]+=d_c_w2
+		self.bias[2]+=d_c_b2
