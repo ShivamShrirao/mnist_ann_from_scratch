@@ -13,7 +13,7 @@ X_train = mndata.process_images_to_numpy(X_train)/255
 X_test, y_test = mndata.load_testing()
 X_test = mndata.process_images_to_numpy(X_test)/255
 
-cnn=nnet.neural_net(nrons=[784,50,30,10])
+cnn=nnet.neural_net(nrons=[784,100,50,30,10])
 cnn.learning_rate=0.1
 # cnn.activations(func=['sigmoid','relu','softmax'])
 y_inp=np.zeros((len(y_train),10))
@@ -21,16 +21,20 @@ for i in range(len(y_train)):
 	y_inp[i][y_train[i]]=1
 
 print("Training....")
+epoch=epochs=5
+while epoch>0:
+	print("Epoch:",(1+epochs-epoch))
+	epoch-=1
+	t=time()
+	for i in range(len(X_train)):
+		out=cnn.feed_forward(X_train[i])
+		cnn.backprop(y_inp[i])
+		if not i%1000:
+			print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
+	print()
+	print("Time:",(time()-t))
 
-t=time()
-for i in range(len(X_train)):
-	out=cnn.feed_forward(X_train[i])
-	cnn.backprop(y_inp[i])
-	if not i%1000:
-		print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
 
-print()
-print("Time:",(time()-t))
 with open('trained.dump','wb') as f:
 	pickle.dump(cnn,f)
 
