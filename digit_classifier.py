@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from mnist import MNIST
 from time import time
 
+print("Loading dataset....")
 mndata = MNIST('../mnist_dataset')
 X_train, y_train = mndata.load_training()
 X_train = mndata.process_images_to_numpy(X_train)/255
@@ -13,17 +14,20 @@ X_test, y_test = mndata.load_testing()
 X_test = mndata.process_images_to_numpy(X_test)/255
 
 cnn=nnet.neural_net(nrons=[784,50,30,10])
+cnn.learning_rate=0.1
 # cnn.activations(func=['sigmoid','relu','softmax'])
 y=np.zeros((len(y_train),10))
 for i in range(len(y_train)):
 	y[i][y_train[i]]=1
+
+print("Training....")
 
 t=time()
 for i in range(len(X_train)):
 	out=cnn.feed_forward(X_train[i])
 	cnn.backprop(y[i])
 	if not i%1000:
-		print('\rProgress:',str(i/600)[:5],'%',end='')
+		print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
 
 print()
 print("Time:",(time()-t))

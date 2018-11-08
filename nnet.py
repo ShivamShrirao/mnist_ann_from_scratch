@@ -10,6 +10,7 @@ class neural_net:
 		self.nrons = nrons
 		self.weights=[]
 		self.bias=[]
+		self.learning_rate=0.1
 		for i in range(len(self.nrons)-1):
 			self.weights.append(2*np.random.rand(self.nrons[i],self.nrons[i+1])-1)
 			self.bias.append(2*np.random.rand(1,self.nrons[i+1])-1)
@@ -38,5 +39,5 @@ class neural_net:
 			d_c_b = d_c_a*self.sigmoid_der(self.a[i+1])
 			d_c_w = np.dot(self.a[i].T, d_c_b)
 			d_c_a = np.dot(d_c_b, self.weights[i].T)
-			self.weights[i]+=d_c_w
-			self.bias[i]+=d_c_b
+			self.weights[i]+=d_c_w*self.learning_rate
+			self.bias[i]+=d_c_b*self.learning_rate
