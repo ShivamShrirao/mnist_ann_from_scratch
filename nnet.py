@@ -29,7 +29,7 @@ class neural_net:
 		for i in range(len(self.nrons)-1):
 			z = (np.dot(self.a[i] ,self.weights[i])+self.bias[i])	# w0(784,20) w1(20,20) w2(20,10)
 			self.a.append(self.sigmoid(z))		# a0(1,784) a1(1,20) a2(1,20) b
-		return self.a[-1]					# a3(1,10)
+		return self.a[-1][0]					# a3(1,10)
 
 	def backprop(self, y):
 		self.y = y 								# (1,10)
