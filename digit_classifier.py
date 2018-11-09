@@ -15,15 +15,15 @@ X_test, y_test = mndata.load_testing()
 X_test = (mndata.process_images_to_numpy(X_test)/255)
 
 cnn=nnet.neural_net(nrons=[784,150,40,10])
-cnn.learning_rate=0.1
-cnn.activations(func=['sigmoid','sigmoid','sigmoid'])
-# cnn.activations(func=['relu','relu','softmax'])
+cnn.learning_rate=0.01
+# cnn.activations(func=['sigmoid','sigmoid','sigmoid'])
+cnn.activations(func=['relu','relu','sigmoid'])
 y_inp=np.zeros((len(y_train),10))
 for i in range(len(y_train)):
 	y_inp[i][y_train[i]]=1
 
 print("Training....")
-epoch=epochs=10
+epoch=epochs=1
 
 total_t=time()
 while epoch>0:
@@ -43,7 +43,7 @@ while epoch>0:
 			print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
 	print()
 	if epoch<(0.3*epochs):
-		cnn.learning_rate=0.01
+		cnn.learning_rate=0.002
 	print("Accuracy:",(correct*100/len(y_train)),'%')
 	print("Time:",(time()-t))
 # sys.exit(0)
