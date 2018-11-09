@@ -23,7 +23,7 @@ for i in range(len(y_train)):
 	y_inp[i][y_train[i]]=1
 
 print("Training....")
-epoch=epochs=1
+epoch=epochs=10
 
 total_t=time()
 while epoch>0:
