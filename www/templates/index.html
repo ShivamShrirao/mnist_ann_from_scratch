@@ -7,7 +7,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <canvas id="draw" width="140" height="140" style="border:2px solid #000000;"></canvas>
-  <script src="app.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js')}}"></script>
   <br>
   <button onclick="submit()">Submit</button>
   <button onclick="redraw()">Clear</button>

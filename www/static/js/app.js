@@ -5,17 +5,18 @@ var canvas = document.getElementById("draw");
 var ctx = canvas.getContext("2d");
 
 // add event listeners to specify when functions should be triggered
-document.addEventListener("mousemove", draw);
-document.addEventListener("mousedown", setPosition);
-document.addEventListener("mouseenter", setPosition);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mousedown", setPosition);
+canvas.addEventListener("mouseenter", setPosition);
 
 // last known position
 var pos = { x: 0, y: 0 };
 
 // new position from mouse events
 function setPosition(e) {
-	pos.x = e.clientX;
-	pos.y = e.clientY;
+	var rect = canvas.getBoundingClientRect();
+	pos.x = e.clientX-rect.left;
+	pos.y = e.clientY-rect.top;
 };
 
 function draw(e) {
@@ -35,28 +36,26 @@ function redraw(){
 };
 
 function submit(){
-	var photo = canvas.toDataURL('image/png');
+	var arr = resize_to_array(canvas);
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', 'http://127.0.0.1:9050/handle.php', true);
+	xhr.open('POST', 'http://127.0.0.1:5000/submit', true);
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xhr.onload = function () {
     	console.log(this.responseText);
 	};
-	xhr.send("input="+photo);
-	// var imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-	// for (var i = 3; i < canvas.width*canvas.height*4; i+=4){
-			// imgData.data[i]=100;
-	// }
-	// ctx.putImageData(imgData, 0, 0);
+	xhr.send("input="+arr);
 };
 
-// function grayscale(){
-// 	var imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-//     for (var i = 0; i < imgData.data.length; i += 4) {
-//       var avg = (imgData.data[i] + imgData.data[i + 1] + imgData.data[i + 2]) / 3;
-//       imgData.data[i]     = avg; // red
-//       imgData.data[i + 1] = avg; // green
-//       imgData.data[i + 2] = avg; // blue
-//     }
-//     ctx.putImageData(imgData, 0, 0);
-// };
+function resize_to_array(canvas) {
+	var rz = document.createElement('canvas');
+	var cx = rz.getContext('2d');
+	rz.width = 28
+	rz.height = 28
+	cx.drawImage(canvas, 0, 0, 28, 28);
+	var arr = [];
+	var imgData=cx.getImageData(0,0,rz.width,rz.height);
+	for (var i = 3; i < imgData.data.length; i+=4) {
+		arr.push(imgData.data[i]);
+	}
+	return arr;
+}
