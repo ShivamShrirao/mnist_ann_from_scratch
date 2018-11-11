@@ -2,7 +2,7 @@
 import numpy as np
 
 sd=470#np.random.randint(1000)
-print(sd)
+# print(sd)
 np.random.seed(sd)	#470
 
 class neural_net:
@@ -71,7 +71,7 @@ class neural_net:
 		ad=ad*gamma+beta				# recover
 		return ad
 
-	def feed_forward(self, X):
+	def feed_forward(self, X):					# np array
 		self.X = X.reshape(1,self.nrons[0])
 		self.z = []
 		self.a = [self.X]						# a0(1,784)

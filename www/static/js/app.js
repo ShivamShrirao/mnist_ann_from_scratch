@@ -22,7 +22,7 @@ function setPosition(e) {
 function draw(e) {
 	if (e.buttons !== 1) return; // if mouse is pressed.....
 	ctx.beginPath(); // begin the drawing path
-	ctx.lineWidth = 8; // width of line
+	ctx.lineWidth = 15; // width of line
 	ctx.lineCap = "round"; // rounded end cap
 	ctx.moveTo(pos.x, pos.y); // from position
 	setPosition(e);
@@ -41,7 +41,9 @@ function submit(){
 	xhr.open('POST', 'http://127.0.0.1:5000/submit', true);
 	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	xhr.onload = function () {
-    	console.log(this.responseText);
+    	var resp = JSON.parse(this.responseText);
+    	console.log(resp);
+    	// alert(this.responseText);
 	};
 	xhr.send("input="+arr);
 };

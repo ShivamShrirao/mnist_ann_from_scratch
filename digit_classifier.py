@@ -18,6 +18,7 @@ ann=nnet.neural_net(nrons=[784,150,40,10])
 ann.learning_rate=0.01
 # ann.activations(func=['sigmoid','sigmoid','sigmoid'])
 ann.activations(func=['relu','relu','sigmoid'])
+
 y_inp=np.zeros((len(y_train),10))
 for i in range(len(y_train)):
 	y_inp[i][y_train[i]]=1
@@ -40,7 +41,7 @@ while epoch>0:
 		if ans == cor:
 			correct+=1
 		if not i%1000:
-			print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
+			print('\rProgress:',round(i/600,2),'%',end='')
 	print()
 	if epoch<(0.3*epochs) and opt:
 		ann.learning_rate/=10
@@ -58,6 +59,7 @@ while epoch>0:
 # sys.exit(0)
 
 print("\nTotal time:",(time()-total_t),"sec")
+
 with open('trained.dump','wb') as f:
 	pickle.dump(ann,f)
 
@@ -71,7 +73,7 @@ for i in range(len(X_train)):
 	if ans == cor:
 		correct+=1
 	if not i%1000:
-			print('\rProgress:',str(i/600)[:5].ljust(5),'%',end='')
+			print('\rProgress:',round(i/600,2),'%',end='')
 print()
 print("Training accuracy:",(correct*100/len(y_train)),'%')
 

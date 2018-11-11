@@ -7,17 +7,17 @@ import matplotlib.pyplot as plt
 
 print("Loading dataset....")
 mndata = MNIST('../mnist_dataset')
-X_train, y_train = mndata.load_training()
-X_train = mndata.process_images_to_numpy(X_train)/255
+# X_train, y_train = mndata.load_training()
+# X_train = mndata.process_images_to_numpy(X_train)/255
 X_test, y_test = mndata.load_testing()
 X_test = mndata.process_images_to_numpy(X_test)/255
 
 with open('trained.dump','rb') as f:
-	cnn=pickle.load(f)
+	ann=pickle.load(f)
 
 while True:
 	ng=np.random.randint(10000)
-	out=cnn.feed_forward(X_test[ng])
+	out=ann.feed_forward(X_test[ng])
 	ans=out.argmax()
 	print("I think number is:",ans)
 	print("Confidence:",str(out[ans]*100)[:5],"%")
@@ -26,5 +26,7 @@ while True:
 	print("Correct answer is:",y_test[ng])
 	print("Cost:",((y-out)**2).sum())
 
+	plt.text(19, 1,'Prediction: {}'.format(ans))
+	plt.text(17, 2,'Confidence: {}'.format(str(round(out[ans]*100,2))+"%"))
 	plt.imshow(X_test[ng].reshape(28,28), cmap='Greys')
 	plt.show()
