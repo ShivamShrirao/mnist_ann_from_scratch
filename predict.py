@@ -18,6 +18,7 @@ with open('trained.dump','rb') as f:
 while True:
 	ng=np.random.randint(10000)
 	out=ann.feed_forward(X_test[ng])
+	print(X_test[ng].shape)
 	ans=out.argmax()
 	print("I think number is:",ans)
 	print("Confidence:",str(out[ans]*100)[:5],"%")
