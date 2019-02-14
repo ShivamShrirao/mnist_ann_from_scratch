@@ -8,6 +8,7 @@ with open('trained.dump','rb') as f:
 # img = cv2.imread("num1.jpg")
 cam = cv2.VideoCapture(0)
 while True:
+	ret, img = cam.read()
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
@@ -17,7 +18,7 @@ while True:
 	rects = [cv2.boundingRect(ctr) for ctr in ctrs]
 
 	for rect in rects:
-		cv2.rectangle(img, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 3) 
+		cv2.rectangle(img, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 2) 
 		y = rect[1]
 		x = rect[0]
 		roi = img_th[y:y+rect[3], x:x+rect[2]]
@@ -28,9 +29,11 @@ while True:
 		out=ann.feed_forward(roi)
 		nbr=out.argmax()
 
-		cv2.putText(img, str(nbr), (rect[0], rect[1]),cv2.FONT_HERSHEY_DUPLEX, 2, (0, 255, 255), 2)
+		cv2.putText(img, str(nbr), (rect[0], rect[1]),cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 255), 1)
 
 	cv2.imshow("Results", img)
 	if cv2.waitKey(1) & 0xff == 27:
 		break
+
+cam.release()
 cv2.destroyAllWindows()
