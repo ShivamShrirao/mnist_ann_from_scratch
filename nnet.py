@@ -64,6 +64,7 @@ class neural_net:
 				self.act_der.append(self.sigmoid_der)
 		if func[-1]=='softmax':
 			self.cross=True
+
 	def batch_norm(self,aa):
 		gamma=aa.std()
 		beta=aa.mean()

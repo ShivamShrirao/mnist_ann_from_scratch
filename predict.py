@@ -15,6 +15,8 @@ X_test = mndata.process_images_to_numpy(X_test)/255
 with open('trained.dump','rb') as f:
 	ann=pickle.load(f)
 
+wnt=6
+
 while True:
 	ng=np.random.randint(10000)
 	out=ann.feed_forward(X_test[ng])
@@ -27,7 +29,8 @@ while True:
 	print("Correct answer is:",y_test[ng])
 	print("Cost:",((y-out)**2).sum())
 
-	plt.text(19, 1,'Prediction: {}'.format(ans))
-	plt.text(17, 2,'Confidence: {}'.format(str(round(out[ans]*100,2))+"%"))
-	plt.imshow(X_test[ng].reshape(28,28), cmap='Greys')
-	plt.show()
+	if y_test[ng]==wnt:
+		plt.text(19, 1,'Prediction: {}'.format(ans))
+		plt.text(17, 2,'Confidence: {}'.format(str(round(out[ans]*100,2))+"%"))
+		plt.imshow(X_test[ng].reshape(28,28), cmap='Greys')
+		plt.show()
