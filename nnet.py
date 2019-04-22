@@ -93,6 +93,7 @@ class neural_net:
 		for i in range((len(self.nrons)-2), -1, -1):
 			d_c_b = d_c_a*(self.act_der[i](self.a[i+1],self.z[i]))
 			d_c_w = np.dot(self.a[i].T, d_c_b)
-			d_c_a = np.dot(d_c_b, self.weights[i].T)
+			if i:
+				d_c_a = np.dot(d_c_b, self.weights[i].T)
 			self.weights[i]+=(d_c_w*self.learning_rate)
 			self.bias[i]+=(d_c_b*self.learning_rate)
