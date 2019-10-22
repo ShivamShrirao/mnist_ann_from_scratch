@@ -14,7 +14,7 @@ X_train = (mndata.process_images_to_numpy(X_train)/255)
 X_test, y_test = mndata.load_testing()
 X_test = (mndata.process_images_to_numpy(X_test)/255)
 
-ann=nnet.neural_net(nrons=[784,150,40,10])
+ann=nnet.neural_net(nrons=[784,128,32,10])
 ann.learning_rate=0.01
 # ann.activations(func=['sigmoid','sigmoid','sigmoid'])
 ann.activations(func=['relu','relu','sigmoid'])

@@ -77,8 +77,8 @@ class neural_net:
 		self.z = []
 		self.a = [self.X]						# a0(1,784)
 		for i in range(len(self.nrons)-1):
-			self.z.append(np.dot(self.a[i] ,self.weights[i])+self.bias[i])	# w0(784,20) w1(20,20) w2(20,10)
-			self.a.append(self.activate[i](self.z[-1]))		# a1(1,20) a2(1,20) b
+			self.z.append(np.dot(self.a[i] ,self.weights[i])+self.bias[i])	# w0(784,40) w1(40,20) w2(20,10)
+			self.a.append(self.activate[i](self.z[-1]))		# a1(1,40) a2(1,20) b
 			# self.a[-1]=self.batch_norm(self.a[-1])
 		# print(self.z[2])
 		# print(self.a[3])

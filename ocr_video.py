@@ -14,7 +14,7 @@ while True:
 
 	ret, img_th = cv2.threshold(gray, 90, 255, cv2.THRESH_BINARY_INV)
 
-	img2,ctrs,hier = cv2.findContours(img_th.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	ctrs,hier = cv2.findContours(img_th.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	rects = [cv2.boundingRect(ctr) for ctr in ctrs]
 
 	for rect in rects:

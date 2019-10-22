@@ -7,15 +7,14 @@ with open('trained.dump','rb') as f:
 	ann=pickle.load(f)
 
 # img = cv2.imread("num1.jpg")
-img = cv2.imread("fff.png")
-# img = cv2.imread("num.png")
+img = cv2.imread("num.png")
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
 ret, img_th = cv2.threshold(gray, 90, 255, cv2.THRESH_BINARY_INV)
 
-img2,ctrs,hier = cv2.findContours(img_th.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+ctrs,hier = cv2.findContours(img_th.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 rects = [cv2.boundingRect(ctr) for ctr in ctrs]
 
 kernel = np.ones((2,1),np.uint8)
