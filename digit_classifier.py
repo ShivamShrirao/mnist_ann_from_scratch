@@ -10,14 +10,14 @@ from time import time
 print("Loading dataset....")
 mndata = MNIST('../mnist_dataset')
 X_train, y_train = mndata.load_training()
-X_train = (mndata.process_images_to_numpy(X_train)/255)
+X_train = (mndata.process_images_to_numpy(X_train)/255).astype(np.float32)
 X_test, y_test = mndata.load_testing()
-X_test = (mndata.process_images_to_numpy(X_test)/255)
+X_test = (mndata.process_images_to_numpy(X_test)/255).astype(np.float32)
 
 ann=nnet.neural_net(nrons=[784,128,32,10])
 ann.learning_rate=0.01
-# ann.activations(func=['sigmoid','sigmoid','sigmoid'])
-ann.activations(func=['relu','relu','sigmoid'])
+ann.activations(func=['sigmoid','sigmoid','sigmoid'])
+# ann.activations(func=['relu','relu','sigmoid'])
 
 y_inp=np.zeros((len(y_train),10))
 for i in range(len(y_train)):

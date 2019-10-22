@@ -13,8 +13,8 @@ class neural_net:
 		self.learning_rate=0.01
 		self.cross=False
 		for i in range(len(self.nrons)-1):
-			self.weights.append(np.random.randn(self.nrons[i],self.nrons[i+1])*np.sqrt(2/self.nrons[i]))
-			self.bias.append(2*np.random.rand(1,self.nrons[i+1])-1)
+			self.weights.append((np.random.randn(self.nrons[i],self.nrons[i+1])*np.sqrt(2/self.nrons[i])).astype(np.float32))
+			self.bias.append(2*np.random.rand(1,self.nrons[i+1]).astype(np.float32)-1)
 
 	def __str__(self):
 		return str(self.__dict__)
@@ -89,11 +89,11 @@ class neural_net:
 		if self.cross:
 			d_c_a = self.del_cross_soft(self.a[-1],self.y)
 		else:
-			d_c_a = 2*(self.y-self.a[-1])
+			d_c_a = 2*(self.a[-1]-self.y)
 		for i in range((len(self.nrons)-2), -1, -1):
 			d_c_b = d_c_a*(self.act_der[i](self.a[i+1],self.z[i]))
 			d_c_w = np.dot(self.a[i].T, d_c_b)
 			if i:
 				d_c_a = np.dot(d_c_b, self.weights[i].T)
-			self.weights[i]+=(d_c_w*self.learning_rate)
-			self.bias[i]+=(d_c_b*self.learning_rate)
+			self.weights[i]-=(d_c_w*self.learning_rate)
+			self.bias[i]-=(d_c_b*self.learning_rate)
