@@ -15,7 +15,7 @@ X_test, y_test = mndata.load_testing()
 X_test = (mndata.process_images_to_numpy(X_test)/255).astype(np.float32)
 
 ann=nnet.neural_net(nrons=[784,128,32,10])
-ann.learning_rate=0.01
+ann.learning_rate=0.1
 ann.activations(func=['sigmoid','sigmoid','sigmoid'])
 # ann.activations(func=['relu','relu','sigmoid'])
 
@@ -27,21 +27,21 @@ print("Training....")
 epoch=epochs=10
 opt=True
 total_t=time()
+btsz=16
 while epoch>0:
 	print("\nEpoch:",(1+epochs-epoch),'/',epochs)
 	epoch-=1
 	correct=0
 	t=time()
-	for i in range(len(X_train)):
-		out=ann.feed_forward(X_train[i])
-		ans=out.argmax()
-		ann.backprop(y_inp[i])
-		cor=y_train[i]
+	for i in range(len(X_train)//btsz):
+		out=ann.feed_forward(X_train[i*btsz:(i+1)*btsz])
+		ans=out.argmax(axis=1)
+		ann.backprop(y_inp[i*btsz:(i+1)*btsz])
+		cor=y_train[i*btsz:(i+1)*btsz]
 		# sys.exit(0)
-		if ans == cor:
-			correct+=1
+		correct+=(ans==cor).sum()
 		if not i%1000:
-			print('\rProgress:',round(i/600,2),'%',end='')
+			print('\rProgress:',round(i*btsz/600,2),'%',end='')
 	print()
 	if epoch<(0.3*epochs) and opt:
 		ann.learning_rate/=10

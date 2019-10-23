@@ -73,7 +73,7 @@ class neural_net:
 		return ad
 
 	def feed_forward(self, X):					# np array
-		self.X = X.reshape(1,self.nrons[0])
+		self.X = X.reshape(-1,self.nrons[0])
 		self.z = []
 		self.a = [self.X]						# a0(1,784)
 		for i in range(len(self.nrons)-1):
@@ -82,10 +82,10 @@ class neural_net:
 			# self.a[-1]=self.batch_norm(self.a[-1])
 		# print(self.z[2])
 		# print(self.a[3])
-		return self.a[-1][0]					# a3(1,10)
+		return self.a[-1]						# a3(1,10)
 
 	def backprop(self, y):
-		self.y = y.reshape(1,self.nrons[-1]) 				# (1,10)
+		self.y = y.reshape(-1,self.nrons[-1]) 				# (1,10)
 		if self.cross:
 			d_c_a = self.del_cross_soft(self.a[-1],self.y)
 		else:
@@ -95,5 +95,6 @@ class neural_net:
 			d_c_w = np.dot(self.a[i].T, d_c_b)
 			if i:
 				d_c_a = np.dot(d_c_b, self.weights[i].T)
+			d_c_b=d_c_b.sum(axis=0,keepdims=True)
 			self.weights[i]-=(d_c_w*self.learning_rate)
 			self.bias[i]-=(d_c_b*self.learning_rate)
