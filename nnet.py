@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import numpy as np
 
-sd=470#np.random.randint(1000)
+# sd=470#np.random.randint(1000)
 # print(sd)
-np.random.seed(sd)	#470
+# np.random.seed(sd)	#470
 
 class neural_net:
 	def __init__(self, nrons):

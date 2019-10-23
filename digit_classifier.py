@@ -27,7 +27,7 @@ print("Training....")
 epoch=epochs=10
 opt=True
 total_t=time()
-btsz=16
+btsz=32
 while epoch>0:
 	print("\nEpoch:",(1+epochs-epoch),'/',epochs)
 	epoch-=1
@@ -41,11 +41,11 @@ while epoch>0:
 		# sys.exit(0)
 		correct+=(ans==cor).sum()
 		if not i%1000:
-			print('\rProgress:',round(i*btsz/600,2),'%',end='')
+			print('\rProgress:',round(i*btsz/600,2),'%\t',"Accuracy:",(correct*100/((i+1)*btsz)),'%',end='')
 	print()
-	if epoch<(0.3*epochs) and opt:
-		ann.learning_rate/=10
-		opt=False
+	# if epoch<(0.3*epochs) and opt:
+	# 	ann.learning_rate/=10
+	# 	opt=False
 	print("Accuracy:",(correct*100/len(y_train)),'%')
 	print("Time:",(time()-t))
 	correct=0
